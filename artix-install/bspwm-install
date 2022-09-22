@@ -1,0 +1,41 @@
+#!/bin/bash
+
+sudo pacman -Ss ttf-nerd-fonts-symbols
+
+cd ~/.config && git clone https://github.com/odknt/bspwmbar.git
+
+cd bspwmbar && sudo make && sudo make install
+
+sleep 10s
+echo "Starting bspwm installation"
+
+cd ~
+
+git clone https://github.com/baskerville/bspwm.git
+git clone https://github.com/baskerville/sxhkd.git
+
+sudo mkdir -p ~/.config/{bspwm,sxhkd}
+
+cd ~/.config/bspwm
+make & sudo make install
+
+cd ..
+cd sxhkd
+make & sudo make install
+
+cd ~
+
+mv /bspwm/examples/bspwmrc ~/.config/bspwm/bspwmrc
+sudo chmod +x ~/.config/bspwm/bspwmrc
+
+cd ~
+
+mv /sxhkd/examples/sxhkdrc ~/.config/sxhkd/sxhkdrc
+sudo chmod +x ~/.config/sxhkd/sxhkdrc
+
+vim ~/.config/sxhkd/sxhkdrc
+
+echo "exec bspwm" >> ~/.xitric
+
+
+
