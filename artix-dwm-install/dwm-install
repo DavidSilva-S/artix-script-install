@@ -2,7 +2,7 @@
 
 sudo pacman -Sy
 
-sudo pacman -S xorg xorg-xinit libx11 libxft xorg-server xf86-video-intel
+sudo pacman -S xorg xorg-xinit libx11 libxft xorg-server xf86-video-intel base-devel libxinerama freetype2 fontconfig
 sudo mkdir -p ~/.config/suckless
 
 cd ~/.config/suckless
