@@ -1,14 +1,15 @@
 #!/bin/bash
+
 echo "Executing artix-install..."
-lsblk
+sudo lsblk
 
 echo "selecione o disco: (ex: /dev/sdx): "
 
 read partionSelected
-cfdisk /dev/$partionSelected
+sudo cfdisk /dev/$partionSelected
 
 clear
-lsblk
+sudo lsblk
 
 echo "digite partição boot"
 read bootPartition
@@ -22,34 +23,39 @@ read homePartition
 echo "digite a swap partition"
 read swapPartition
 
-mkfs.fat -F32 -n BOOT /dev/$bootPartition
-mkfs.ext4 -L ROOT /dev/$rootPartition
-mkfs.ext4 -L HOME /dev/$homePartition
-mkswap -L SWAP /dev/$swapPartition
+sudo mkfs.fat -F32 -n BOOT /dev/$bootPartition
+sudo mkfs.ext4 -L ROOT /dev/$rootPartition
+sudo mkfs.ext4 -L HOME /dev/$homePartition
+sudo mkswap -L SWAP /dev/$swapPartition
 
-mkdir -p /mnt/boot/efi
-mount /dev/$bootPartition /mnt/boot/efi
+sudo swapon /dev/$swapPartition
+
+sudo mkdir -p /mnt/boot/efi
+sudo mount /dev/$bootPartition /mnt/boot/efi
+sudo clear
+
+sudo mount /dev/$rootPartition /mnt
+
+sudo mkdir -p /mnt/home
+sudo mount /dev/$homePartition /mnt/home
 clear
 
-mkdir -p /mnt/home
-mount /dev/$homePartition
-swapon /dev/$swapPartition
+sudo nano /etc/pacman.d/mirrorlist
 
-clear
-mount /dev/$rootPartition /mnt
+sudo ln -sf /etc/runit/sv/ntpd /var/run/runit/service
 
-nano /etc/pacman.d/mirrorlist
+sudo sv start ntpd
+sudo sv up ntpd
 
-ln -sf /etc/runit/sv/ntpd /var/run/runit/service
+sudo basestrap -i /mnt base base-devel linux linux-headers linux-firmware elogind-runit runit git nano
 
-sv start ntpd
-sv up ntpd
+sudo fstabgen -U /mnt
+sudo fstabgen -U /mnt >> /mnt/etc/fstab
 
-basestrap -i /mnt base base-devel linux linux-headers linux-firmware elogind-runit runit git nano
+sudo nano /mnt/etc/fstab
 
-fstabgen -U /mnt
-fstabgen -U /mnt >> /mnt/etc/fstab
+cd ..
 
-nano /mnt/etc/fstab
+sudo cp -r $(pwd)/artix-install 
 
 artix-chroot /mnt /bin/bash
