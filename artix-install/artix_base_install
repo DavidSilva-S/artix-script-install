@@ -30,8 +30,8 @@ sudo mkswap -L SWAP /dev/$swapPartition
 
 sudo swapon /dev/$swapPartition
 
-sudo mkdir -p /mnt/boot/efi
-sudo mount /dev/$bootPartition /mnt/boot/efi
+sudo mkdir -p /mnt/boot
+sudo mount /dev/$bootPartition /mnt/boot
 sudo clear
 
 sudo mount /dev/$rootPartition /mnt
