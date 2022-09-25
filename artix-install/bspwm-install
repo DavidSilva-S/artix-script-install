@@ -1,39 +1,33 @@
 #!/bin/bash
 
-sudo pacman -Ss ttf-nerd-fonts-symbols
+sudo pacman -S ttf-nerd-fonts-symbols pipewire pipewire-alsa 
 
-cd ~/.config && git clone https://github.com/odknt/bspwmbar.git
+if [[ ! -d "~/.config" ]]; then
+  echo "creating .config dir ..."
+  sudo mkdir -p ~/.config/{bspwm,sxhkd,bspwmbar}
+  sudo mkdir -p ~/bspwm-default
+fi
 
-cd bspwmbar && sudo make && sudo make install
+cd ~ 
+cd bspwm-default && sudo git clone https://github.com/baskerville/bspwm.git && sudo git clone https://github.com/baskerville/sxhkd.git
 
-sleep 10s
-echo "Starting bspwm installation"
-
-cd ~
-
-git clone https://github.com/baskerville/bspwm.git
-git clone https://github.com/baskerville/sxhkd.git
-
-sudo mkdir -p ~/.config/{bspwm,sxhkd}
-
-cd ~/.config/bspwm
-make & sudo make install
-
+#cd bspwmbar && sudo make && sudo make install
+#cd ..
+cd bspwm && sudo make && sudo make install
 cd ..
-cd sxhkd
-make & sudo make install
+cd sxhkd && sudo make && sudo make install
 
 cd ~
 
-mv /bspwm/examples/bspwmrc ~/.config/bspwm/bspwmrc
+sudo mv ~/bspwm-default/bspwm/examples/bspwmrc ~/.config/bspswm
 sudo chmod +x ~/.config/bspwm/bspwmrc
 
 cd ~
 
-mv /sxhkd/examples/sxhkdrc ~/.config/sxhkd/sxhkdrc
+sudo mv ~/bspwm-default/bspwm/examples/sxhkdrc ~/.config/sxhkd
 sudo chmod +x ~/.config/sxhkd/sxhkdrc
 
-vim ~/.config/sxhkd/sxhkdrc
+  vim ~/.config/sxhkd/sxhkdrc
 
 echo "exec bspwm" >> ~/.xitric
 

@@ -1,61 +1,66 @@
 #!/bin/bash
 
 echo "Executing artix-install..."
-sudo lsblk
+lsblk
 
 echo "selecione o disco: (ex: /dev/sdx): "
 
 read partionSelected
-sudo cfdisk /dev/$partionSelected
+cfdisk /dev/$partionSelected
 
 clear
-sudo lsblk
+lsblk
 
-echo "digite partição boot"
+
+echo "digite partição boot: "
+echo ""
 read bootPartition
 
-echo "digite a partição root"
+echo "digite a partição root: "
+echo ""
 read rootPartition
 
-echo "digite a partição home"
+echo "digite a partição home: "
+echo ""
 read homePartition
 
-echo "digite a swap partition"
+echo "digite a swap partition: "
+echo ""
 read swapPartition
 
-sudo mkfs.fat -F32 -n BOOT /dev/$bootPartition
-sudo mkfs.ext4 -L ROOT /dev/$rootPartition
-sudo mkfs.ext4 -L HOME /dev/$homePartition
-sudo mkswap -L SWAP /dev/$swapPartition
+mkfs.fat -F 32 -n BOOT /dev/$bootPartition
+mkfs.ext4 -L ROOT /dev/$rootPartition
+mkfs.ext4 -L HOME /dev/$homePartition
+mkswap -L SWAP /dev/$swapPartition
 
-sudo swapon /dev/$swapPartition
+mount /dev/$rootPartition /mnt
 
-sudo mkdir -p /mnt/boot
-sudo mount /dev/$bootPartition /mnt/boot
-sudo clear
-
-sudo mount /dev/$rootPartition /mnt
-
-sudo mkdir -p /mnt/home
-sudo mount /dev/$homePartition /mnt/home
+mkdir -p /mnt/boot/efi #{efi}
+mount /dev/$bootPartition /mnt/boot/efi #{efi}
 clear
 
-sudo nano /etc/pacman.d/mirrorlist
+mkdir -p /mnt/home
+mount /dev/$homePartition /mnt/home
+clear
 
-sudo ln -sf /etc/runit/sv/ntpd /var/run/runit/service
+swapon /dev/$swapPartition
 
-sudo sv start ntpd
-sudo sv up ntpd
+nano /etc/pacman.d/mirrorlist
 
-sudo basestrap -i /mnt base base-devel linux linux-headers linux-firmware elogind-runit runit git nano
+ln -sf /etc/runit/sv/ntpd /var/run/runit/service
 
-sudo fstabgen -U /mnt
-sudo fstabgen -U /mnt >> /mnt/etc/fstab
+sv start ntpd
+sv up ntpd
 
-sudo nano /mnt/etc/fstab
+basestrap -i /mnt base base-devel linux-lts linux-headers linux-firmware elogind-runit runit git nano vim
+
+fstabgen -U /mnt
+fstabgen -U /mnt >> /mnt/etc/fstab
+
+nano /mnt/etc/fstab
 
 cd ..
 
-sudo cp -r $(pwd)/artix-install 
+cp -r $(pwd)/artix-install 
 
 artix-chroot /mnt /bin/bash

@@ -4,14 +4,14 @@ sudo chmod 777 $(pwd)/*
 
 sudo pacman -Sy
 
-sudo pacman -S xorg xorg-xinit libx11 libxft xorg-server xf86-video-intel
+sudo pacman -S xorg xorg-xinit libxinerama fontconfig libx11 libxft xorg-server xf86-video-intel
 sudo mkdir -p ~/.config/suckless
 
 cd ~/.config/suckless
 
-git clone git://git.suckless.org/st ~/.local/src/st
-git clone git://git.suckless.org/dmenu ~/.local/src/dmenu
-git clone git://git.suckless.org/dwm ~/.local/src/dwm
+git clone git://git.suckless.org/st
+git clone git://git.suckless.org/dmenu 
+git clone git://git.suckless.org/dwm 
 
 cd ~/.config/suckless/st
 sudo make clean install
@@ -35,4 +35,3 @@ sudo nano .xitric
 
 startx
 
-echo "done!"

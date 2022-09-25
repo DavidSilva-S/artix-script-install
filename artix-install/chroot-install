@@ -9,7 +9,7 @@ locale-gen
 clear
 touch /etc/locale.conf
  
-echo 'LANG=en_US.UTF-8' >> /etc/locale.conf
+echo 'LANG=pt_BR.UTF-8' >> /etc/locale.conf
 clear
 
 echo "type your hostname"
@@ -30,15 +30,14 @@ pacman -S dhcpcd
 echo "Root user password: "
 passwd
 
-pacman -Sy networkmanager networkmanager-runit
-sudo ln -s /etc/runit/sv/NetworkManager /var/run/runit/service
-sudo sv start NetworkManager
-
-sudo pacman -S xf86-input-libinput grub efibootmgr os-prober
+pacman -Sy networkmanager networkmanager-runit xf86-input-libinput grub efibootmgr os-prober
   
-sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub 
+sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub 
 
 grub-mkconfig -o /boot/grub/grub.cfg
+
+#sudo ln -s /etc/runit/sv/NetworkManager /var/run/runit/service
+#sudo sv start NetworkManager
 
 echo "add user name: "
 read userName
