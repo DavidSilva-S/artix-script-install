@@ -27,9 +27,10 @@ cd ~
 sudo mv ~/bspwm-default/bspwm/examples/sxhkdrc ~/.config/sxhkd
 sudo chmod +x ~/.config/sxhkd/sxhkdrc
 
-  vim ~/.config/sxhkd/sxhkdrc
+vim ~/.config/sxhkd/sxhkdrc
 
 echo "exec bspwm" >> ~/.xitric
+
 
 
 
